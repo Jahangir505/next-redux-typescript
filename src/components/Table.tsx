@@ -1,6 +1,5 @@
 import { deleteItem } from "@/redux/actions/itemActions";
 import { AppDispatch, RootState } from "@/redux/store";
-import { Post } from "@/types";
 import { useDispatch, useSelector } from "react-redux";
 
 const Table = () => {
@@ -33,7 +32,7 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {items.map((item: Post, i: number) => (
+          {items.map((item: any, i: number) => (
             <tr
               className="border-b border-gray-200 dark:border-gray-700"
               key={i}
@@ -44,16 +43,19 @@ const Table = () => {
               >
                 {item.title}
               </th>
-              <td className="px-6 py-4">{item?.body.slice(0, 40)}</td>
+              <td className="px-6 py-4">
+                {item?.body && item?.body.slice(0, 40)}
+              </td>
               <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
-                {item?.tags.map((tag: string, i: number) => (
-                  <span
-                    className="inline-block m-1 px-2 py-1 font-semibold leading-6 text-gray-900 rounded-full bg-gray-100 dark:bg-gray-900 dark:text-gray-400 text-xs hover:bg-green-200 dark:hover:bg-green-700"
-                    key={i}
-                  >
-                    {tag}
-                  </span>
-                ))}
+                {item?.tags &&
+                  item?.tags.map((tag: string, i: number) => (
+                    <span
+                      className="inline-block m-1 px-2 py-1 font-semibold leading-6 text-gray-900 rounded-full bg-gray-100 dark:bg-gray-900 dark:text-gray-400 text-xs hover:bg-green-200 dark:hover:bg-green-700"
+                      key={i}
+                    >
+                      {tag}
+                    </span>
+                  ))}
               </td>
               <td className="px-6 py-4">
                 <button
