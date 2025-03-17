@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const API_URL = "https://jsonplaceholder.typicode.com/posts";
+
 type Item = {
   id: number;
   name: string;
@@ -9,11 +11,18 @@ type Item = {
 
 type ItemState = {
   items: Item[];
+  loading: boolean;
+  error: string | null;
 };
 
 const initialState: ItemState = {
   items: [],
+  loading: false,
+  error: null,
 };
+
+
+
 
 const itemSlice = createSlice({
   name: "items",
