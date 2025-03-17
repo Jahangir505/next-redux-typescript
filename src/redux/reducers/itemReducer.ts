@@ -1,20 +1,15 @@
+import { Post } from "@/types";
 import {
   ADD_ITEM,
   DELETE_ITEM,
   ITEM_ERROR,
   ITEM_LOADING,
   SET_ITEM_LIST,
-  UPDATE_ITEM,
+  UPDATE_ITEM
 } from "../actions/actionTypes";
 
-type Item = {
-  id: number;
-  title: string;
-  body: string;
-};
-
 type InitialState = {
-  items: Item[];
+  items: Post[];
   loading: boolean;
   error: null | string;
 };
@@ -22,7 +17,7 @@ type InitialState = {
 const initialState: InitialState = {
   items: [],
   loading: false,
-  error: null,
+  error: null
 };
 
 const itemReducer = (state = initialState, action: any) => {
@@ -38,18 +33,18 @@ const itemReducer = (state = initialState, action: any) => {
         ...state,
         items: state.items.map((item) =>
           item.id === action.payload.id ? action.payload : item
-        ),
+        )
       };
     case DELETE_ITEM:
       return {
         ...state,
-        items: state.items.filter((item) => item.id !== action.payload),
+        items: state.items.filter((item) => item.id !== action.payload)
       };
     case ITEM_ERROR:
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload
       };
     default:
       return state;
