@@ -7,8 +7,7 @@ import { useDispatch } from "react-redux";
 const Form = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [title, setTitle] = useState("");
-  const [subtitle, setSubtitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [body, setBody] = useState("");
   const [image, setImage] = useState<File | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +18,7 @@ const Form = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title || !description) {
+    if (!title || !body) {
       alert("Please fill in all fields.");
       return;
     }
@@ -31,8 +30,7 @@ const Form = () => {
     };
     dispatch(addItem(newItem));
     setTitle("");
-    setSubtitle("");
-    setDescription("");
+    setBody("");
     setImage(null);
   };
   return (
@@ -46,19 +44,13 @@ const Form = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <input
-          type="text"
-          className="w-full p-2 mb-4 border rounded"
-          placeholder="Sub Title"
-          value={subtitle}
-          onChange={(e) => setSubtitle(e.target.value)}
-        />
+
         <textarea
           name=""
           className="w-full p-2 mb-4 border rounded"
           placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
         ></textarea>
         <input
           type="file"
