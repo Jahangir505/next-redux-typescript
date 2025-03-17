@@ -2,7 +2,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import itemReducer from "./itemReducer";
 
 const appReducer = combineReducers({
-  itemReducer,
+  itemReducer
 });
 
 const rootReducer = (state: any, action: any) => appReducer(state, action);

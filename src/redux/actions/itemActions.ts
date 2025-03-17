@@ -22,8 +22,8 @@ export const addItem = (item: Post) => async (dispatch: any) => {
   try {
     const formData = new FormData();
     formData.append("title", item.title);
-    formData.append("body", item.body);
-    formData.append("userId", 1);
+    formData.append("body", item?.body ?? "");
+    formData.append("userId", "1");
 
     const response = await axios.post(`${API_URL}/add`, formData);
     // console.log("response=======", response);
