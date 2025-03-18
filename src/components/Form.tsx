@@ -1,5 +1,7 @@
+import { RootState } from "@/redux/store";
 import { Post } from "@/types";
 import React from "react";
+import { useSelector } from "react-redux";
 
 interface FormProps {
   post: Post;
@@ -9,6 +11,9 @@ interface FormProps {
 }
 
 const Form = ({ post, setPost, handleSubmit, handleUpdatePost }: FormProps) => {
+  const { loading } = useSelector(
+    (state: RootState) => state.items.postReducer
+  );
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md">
       <h2 className="text-xl font-semibold mb-4">
@@ -38,10 +43,11 @@ const Form = ({ post, setPost, handleSubmit, handleUpdatePost }: FormProps) => {
           onChange={handleImageChange}
         /> */}
         <button
-          className="w-full bg-blue-500 text-white p-2 rounded"
-          onClick={() =>
-            post.id ? handleUpdatePost(post, post.id) : handleSubmit
+          className="w-full bg-blue-500 text-white p-2 rounded cursor-pointer"
+          onClick={(e) =>
+            post.id ? handleUpdatePost(post, post.id) : handleSubmit(e)
           }
+          disabled={loading}
         >
           {post.id ? "Update Post" : "Add Post"}
         </button>

@@ -23,11 +23,15 @@ const initialState: InitialState = {
 const postReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case POST_LOADING:
-      return { ...state, loading: false, error: null };
+      return { ...state, loading: true, error: null };
     case SET_POST_LIST:
       return { ...state, loading: false, items: action.payload };
     case ADD_POST:
-      return { ...state, items: [...state.items, action.payload] };
+      return {
+        ...state,
+        loading: false,
+        items: [action.payload, ...state.items]
+      };
     case UPDATE_POST:
       return {
         ...state,

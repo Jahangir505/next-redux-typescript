@@ -10,16 +10,17 @@ import {
   UPDATE_POST
 } from "./actionTypes";
 
-const API_URL = "https://dummyjson.com/posts";
+// const API_URL = "https://dummyjson.com/posts"; // dummyjson
+const API_URL = "https://jsonplaceholder.typicode.com/posts"; // jsonplaceholder
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 // Fetch Items
 export const fetchPosts = () => async (dispatch: any) => {
   dispatch({ type: POST_LOADING });
   try {
-    const response = await axios.get(API_URL);
-    console.log("response=======", response.data.posts);
+    const response = await axios.get(`${API_URL}?sortBy=id&order=desc`);
+    console.log("response=======", response.data);
 
-    dispatch({ type: SET_POST_LIST, payload: response.data.posts });
+    dispatch({ type: SET_POST_LIST, payload: response.data });
   } catch (error) {
     dispatch({ type: POST_ERROR, payload: error });
   }
@@ -29,14 +30,14 @@ export const fetchPosts = () => async (dispatch: any) => {
 export const addPost = (post: Post) => async (dispatch: any) => {
   dispatch({ type: POST_LOADING });
   try {
-    const formData = new FormData();
-    formData.append("title", post.title);
-    formData.append("body", post?.body ?? "");
-    formData.append("userId", "1");
-
-    const response = await axios.post(`${API_URL}/add`, formData);
+    const formData = {
+      title: post.title,
+      body: post.body,
+      userId: 187
+    };
+    const response = await axios.post(`${API_URL}`, formData);
     // console.log("response=======", response);
-    if (response.status === 200) {
+    if (response) {
       Swal.fire({
         icon: "success",
         title: "Added Successfully",
@@ -44,7 +45,7 @@ export const addPost = (post: Post) => async (dispatch: any) => {
         timer: 1500
       });
     }
-    dispatch({ type: ADD_POST, payload: formData });
+    dispatch({ type: ADD_POST, payload: response.data });
   } catch (error) {
     dispatch({ type: POST_ERROR, payload: error });
   }
