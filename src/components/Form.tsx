@@ -1,70 +1,51 @@
-import { addItem } from "@/redux/actions/itemActions";
-import { AppDispatch } from "@/redux/store";
 import { Post } from "@/types";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
 
-const Form = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+interface FormProps {
+  post: Post;
+  setPost: React.Dispatch<React.SetStateAction<Post>>;
+  handleSubmit: (e: React.FormEvent) => void;
+  handleUpdatePost: (post: Post, id: number) => void;
+}
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setImage(e.target.files[0]);
-    }
-  };
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!title || !body) {
-      alert("Please fill in all fields.");
-      return;
-    }
-    const newItem: Post = {
-      title,
-      body,
-      image,
-      id: Date.now()
-    };
-    dispatch(addItem(newItem));
-    setTitle("");
-    setBody("");
-    setImage(null);
-  };
+const Form = ({ post, setPost, handleSubmit, handleUpdatePost }: FormProps) => {
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4">Add New Item</h2>
-      <form onSubmit={handleSubmit}>
+      <h2 className="text-xl font-semibold mb-4">
+        {post.id ? "Update Post" : "Add Post"}
+      </h2>
+
+      <div>
         <input
           type="text"
           className="w-full p-2 mb-4 border rounded"
           placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={post.title}
+          onChange={(e) => setPost({ ...post, title: e.target.value })}
         />
 
         <textarea
           name=""
           className="w-full p-2 mb-4 border rounded"
-          placeholder="Description"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
+          placeholder="Body text"
+          value={post.body}
+          onChange={(e) => setPost({ ...post, body: e.target.value })}
         ></textarea>
-        <input
+        {/* <input
           type="file"
           accept="image/*"
           className="w-full p-2 mb-4 border rounded"
           onChange={handleImageChange}
-        />
+        /> */}
         <button
           className="w-full bg-blue-500 text-white p-2 rounded"
-          type="submit"
+          onClick={() =>
+            post.id ? handleUpdatePost(post, post.id) : handleSubmit
+          }
         >
-          Add Item
+          {post.id ? "Update Post" : "Add Post"}
         </button>
-      </form>
+      </div>
     </div>
   );
 };

@@ -1,11 +1,11 @@
 import { Post } from "@/types";
 import {
-  ADD_ITEM,
-  DELETE_ITEM,
-  ITEM_ERROR,
-  ITEM_LOADING,
-  SET_ITEM_LIST,
-  UPDATE_ITEM
+  ADD_POST,
+  DELETE_POST,
+  POST_ERROR,
+  POST_LOADING,
+  SET_POST_LIST,
+  UPDATE_POST
 } from "../actions/actionTypes";
 
 type InitialState = {
@@ -20,27 +20,27 @@ const initialState: InitialState = {
   error: null
 };
 
-const itemReducer = (state = initialState, action: any) => {
+const postReducer = (state = initialState, action: any) => {
   switch (action.type) {
-    case ITEM_LOADING:
+    case POST_LOADING:
       return { ...state, loading: false, error: null };
-    case SET_ITEM_LIST:
+    case SET_POST_LIST:
       return { ...state, loading: false, items: action.payload };
-    case ADD_ITEM:
+    case ADD_POST:
       return { ...state, items: [...state.items, action.payload] };
-    case UPDATE_ITEM:
+    case UPDATE_POST:
       return {
         ...state,
         items: state.items.map((item) =>
           item.id === action.payload.id ? action.payload : item
         )
       };
-    case DELETE_ITEM:
+    case DELETE_POST:
       return {
         ...state,
         items: state.items.filter((item) => item.id !== action.payload)
       };
-    case ITEM_ERROR:
+    case POST_ERROR:
       return {
         ...state,
         loading: false,
@@ -51,4 +51,4 @@ const itemReducer = (state = initialState, action: any) => {
   }
 };
 
-export default itemReducer;
+export default postReducer;

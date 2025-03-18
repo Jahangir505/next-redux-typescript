@@ -1,8 +1,8 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import itemReducer from "./itemReducer";
+import postReducer from "./postReducer";
 
 const appReducer = combineReducers({
-  itemReducer
+  postReducer
 });
 
 const rootReducer = (state: any, action: any) => appReducer(state, action);
