@@ -20,9 +20,9 @@ const Table = ({ items, setPost }: TableProps) => {
             <th scope="col" className="px-6 py-3 w-[400px]">
               Body
             </th>
-            <th scope="col" className="px-6 py-3 dark:bg-gray-800 w-[200px]">
+            {/* <th scope="col" className="px-6 py-3 dark:bg-gray-800 w-[200px]">
               Tags
-            </th>
+            </th> */}
             <th scope="col" className="px-6 py-3 w-[150px]">
               Action
             </th>
@@ -43,7 +43,7 @@ const Table = ({ items, setPost }: TableProps) => {
               <td className="px-2 py-2">
                 {item?.body && item?.body.slice(0, 90)}
               </td>
-              <td className="px-2 py-2 bg-gray-50 dark:bg-gray-800">
+              {/* <td className="px-2 py-2 bg-gray-50 dark:bg-gray-800">
                 {item?.tags &&
                   item?.tags.map((tag: string, i: number) => (
                     <span
@@ -53,7 +53,7 @@ const Table = ({ items, setPost }: TableProps) => {
                       {tag}
                     </span>
                   ))}
-              </td>
+              </td> */}
               <td className="px-2 py-2 flex gap-3">
                 <button
                   className="font-medium bg-blue-500 px-3 py-1 text-white dark:text-white-500 hover:underline cursor-pointer"

@@ -75,8 +75,11 @@ export default function Home() {
           </a>
         </p>
       </div>
-      <main className="grid grid-cols-5 gap-[32px] row-start-2 items-center sm:items-start">
+      <main className="grid grid-cols-6 gap-[32px] row-start-2 items-center sm:items-start">
+        <div className="col-span-2">
+
         <Form post={post} setPost={setPost} handleSubmit={handleSubmit} handleUpdatePost={handleUpdatePost} />
+        </div>
         <div className="h-[450px] overflow-y-scroll col-span-4">
           <Table items={items} setPost={setPost} />
         </div>
