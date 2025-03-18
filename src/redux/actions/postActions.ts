@@ -1,5 +1,6 @@
 import { Post } from "@/types";
 import axios from "axios";
+import Swal from "sweetalert2";
 import {
   ADD_POST,
   DELETE_POST,
@@ -35,7 +36,14 @@ export const addPost = (post: Post) => async (dispatch: any) => {
 
     const response = await axios.post(`${API_URL}/add`, formData);
     // console.log("response=======", response);
-
+    if (response.status === 200) {
+      Swal.fire({
+        icon: "success",
+        title: "Added Successfully",
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
     dispatch({ type: ADD_POST, payload: formData });
   } catch (error) {
     dispatch({ type: POST_ERROR, payload: error });
@@ -48,6 +56,16 @@ export const updatePost =
     dispatch({ type: POST_LOADING });
     try {
       const response = await axios.put(`${API_URL}/${id}`, updatedItem);
+      console.log("response=======", response);
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Updated Successfully",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+
       const data = await response.data;
       dispatch({ type: UPDATE_POST, payload: data });
     } catch (error) {
@@ -59,8 +77,21 @@ export const updatePost =
 export const deletePost = (id: number) => async (dispatch: any) => {
   dispatch({ type: POST_LOADING });
   try {
-    await axios.delete(`${API_URL}/${id}`);
-    dispatch({ type: DELETE_POST, payload: id });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await axios.delete(`${API_URL}/${id}`);
+        dispatch({ type: DELETE_POST, payload: id });
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
   } catch (error) {
     dispatch({ type: POST_ERROR, payload: error });
   }
