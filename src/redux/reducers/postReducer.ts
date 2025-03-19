@@ -5,6 +5,7 @@ import {
   POST_ERROR,
   POST_LOADING,
   SET_POST_LIST,
+  SET_SELECTED_ITEM,
   UPDATE_POST
 } from "../actions/actionTypes";
 
@@ -12,12 +13,14 @@ type InitialState = {
   items: Post[];
   loading: boolean;
   error: null | string;
+  selectedItem: null;
 };
 
 const initialState: InitialState = {
   items: [],
   loading: false,
-  error: null
+  error: null,
+  selectedItem: null
 };
 
 const postReducer = (state = initialState, action: any) => {
@@ -26,6 +29,8 @@ const postReducer = (state = initialState, action: any) => {
       return { ...state, loading: true, error: null };
     case SET_POST_LIST:
       return { ...state, loading: false, items: action.payload };
+    case SET_SELECTED_ITEM:
+      return { ...state, selectedItem: action.payload };
     case ADD_POST:
       return {
         ...state,

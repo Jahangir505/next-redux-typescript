@@ -1,8 +1,10 @@
 import Form from "@/components/Form";
 import Table from "@/components/Table";
-import { addPost, fetchPosts, updatePost } from "@/redux/actions/postActions";
+import { addPost, setPostList, updatePost } from "@/redux/actions/postActions";
 import { AppDispatch, RootState } from "@/redux/store";
 import { Post } from "@/types";
+import axios from "axios";
+import { GetServerSideProps } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +19,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export default function Home() {
+interface Props {
+  posts: Post[];
+}
+
+export default function Home({ posts }: Props) {
   const dispatch = useDispatch<AppDispatch>();
   const [post, setPost] = useState<Post>({
     title: "",
@@ -25,8 +31,10 @@ export default function Home() {
     image: null,
     id: 0,
   });
+
   const [loading, setLoading] = useState(false);
   const { items } = useSelector((state: RootState) => state.items.postReducer);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,11 +73,10 @@ export default function Home() {
   };
 
   useEffect(() => {
-    dispatch(fetchPosts());
-  }, [dispatch]);
-
+    dispatch(setPostList(posts));
+  }, [dispatch, posts]);
   return (
-    <div className="min-h-screen flex flex-col bg-white items-center px-6 sm:px-10 md:px-20 py-10 gap-8 md:gap-12">
+    <div className="min-h-screen flex flex-col items-center px-6 sm:px-10 md:px-20 py-10 gap-8 md:gap-12">
       {/* Header */}
       <div className="text-center">
         <h1
@@ -109,3 +116,16 @@ export default function Home() {
     </div>
   );
 }
+
+// ✅ Fetch data server-side
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const response = await axios.get(
+      "https://jsonplaceholder.typicode.com/posts"
+    );
+    return { props: { posts: response.data.slice(0, 10) } }; // Fetch only 10 posts
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return { props: { posts: [] } };
+  }
+};

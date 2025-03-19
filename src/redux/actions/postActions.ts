@@ -7,6 +7,7 @@ import {
   POST_ERROR,
   POST_LOADING,
   SET_POST_LIST,
+  SET_SELECTED_ITEM,
   UPDATE_POST
 } from "./actionTypes";
 
@@ -25,6 +26,16 @@ export const fetchPosts = () => async (dispatch: any) => {
     dispatch({ type: POST_ERROR, payload: error });
   }
 };
+
+export const setPostList = (posts: any[]) => ({
+  type: SET_POST_LIST,
+  payload: posts
+});
+
+export const setSelectedItem = (item: any | null) => ({
+  type: SET_SELECTED_ITEM,
+  payload: item,
+});
 
 // Add Item
 export const addPost = (post: Post) => async (dispatch: any) => {
