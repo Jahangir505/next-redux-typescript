@@ -1,7 +1,8 @@
-import { deletePost } from "@/redux/actions/postActions";
-import { AppDispatch } from "@/redux/store";
+import { deletePost, setSelectedItem } from "@/redux/actions/postActions";
+import { AppDispatch, RootState } from "@/redux/store";
 import { Post } from "@/types";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 interface TableProps {
   items: any;
@@ -9,6 +10,19 @@ interface TableProps {
 }
 const Table = ({ items, setPost }: TableProps) => {
   const dispatch = useDispatch<AppDispatch>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { selectedItem } = useSelector(
+    (state: RootState) => state.items.postReducer
+  );
+  const handleViewPost = (item: any) => {
+    dispatch(setSelectedItem(item));
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    dispatch(setSelectedItem(null));
+    setIsModalOpen(false);
+  };
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -55,6 +69,12 @@ const Table = ({ items, setPost }: TableProps) => {
                   ))}
               </td> */}
               <td className="px-2 py-2 flex gap-3">
+                {/* <button
+                  className="font-medium bg-blue-500 px-3 py-1 text-white dark:text-white-500 hover:underline cursor-pointer"
+                  onClick={() => handleViewPost(item)}
+                >
+                  View
+                </button> */}
                 <button
                   className="font-medium bg-blue-500 px-3 py-1 text-white dark:text-white-500 hover:underline cursor-pointer"
                   onClick={() => setPost(item)}

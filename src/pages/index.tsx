@@ -1,8 +1,10 @@
 import Form from "@/components/Form";
 import Table from "@/components/Table";
-import { addPost, fetchPosts, updatePost } from "@/redux/actions/postActions";
+import { addPost, setPostList, updatePost } from "@/redux/actions/postActions";
 import { AppDispatch, RootState } from "@/redux/store";
 import { Post } from "@/types";
+import axios from "axios";
+import { GetServerSideProps } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +19,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"]
 });
 
-export default function Home() {
+interface Props {
+  posts: Post[];
+}
+
+export default function Home({ posts }: Props) {
   const dispatch = useDispatch<AppDispatch>();
   const [post, setPost] = useState<Post>({
     title: "",
@@ -26,14 +32,12 @@ export default function Home() {
     id: 0
   });
 
-  const { items } = useSelector((state: RootState) => state.items.postReducer);
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setPost({ ...post, image: e.target.files[0] });
     }
   };
-
+  const { items } = useSelector((state: RootState) => state.items.postReducer);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -57,8 +61,8 @@ export default function Home() {
   };
 
   useEffect(() => {
-    dispatch(fetchPosts());
-  }, [dispatch]);
+    dispatch(setPostList(posts));
+  }, [dispatch, posts]);
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div>
@@ -77,8 +81,12 @@ export default function Home() {
       </div>
       <main className="grid grid-cols-6 gap-[32px] row-start-2 items-center sm:items-start">
         <div className="col-span-2">
-
-        <Form post={post} setPost={setPost} handleSubmit={handleSubmit} handleUpdatePost={handleUpdatePost} />
+          <Form
+            post={post}
+            setPost={setPost}
+            handleSubmit={handleSubmit}
+            handleUpdatePost={handleUpdatePost}
+          />
         </div>
         <div className="h-[450px] overflow-y-scroll col-span-4">
           <Table items={items} setPost={setPost} />
@@ -87,3 +95,16 @@ export default function Home() {
     </div>
   );
 }
+
+// ✅ Fetch data server-side
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const response = await axios.get(
+      "https://jsonplaceholder.typicode.com/posts"
+    );
+    return { props: { posts: response.data.slice(0, 10) } }; // Fetch only 10 posts
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return { props: { posts: [] } };
+  }
+};

@@ -15,7 +15,7 @@ const Form = ({ post, setPost, handleSubmit, handleUpdatePost }: FormProps) => {
     (state: RootState) => state.items.postReducer
   );
   return (
-    <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md">
+    <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg">
       <h2 className="text-xl font-semibold mb-4">
         {post.id ? "Update Post" : "Add Post"}
       </h2>
