@@ -101,7 +101,7 @@ export const deletePost = (id: number) => async (dispatch: any) => {
       if (result.isConfirmed) {
         await axios.delete(`${API_URL}/${id}`);
         dispatch({ type: DELETE_POST, payload: id });
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        Swal.fire("Deleted!", "Your post has been deleted.", "success");
       }
     });
   } catch (error) {
