@@ -25,24 +25,43 @@ export default function Home() {
     image: null,
     id: 0,
   });
-
+  const [loading, setLoading] = useState(false);
   const { items } = useSelector((state: RootState) => state.items.postReducer);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!post.title || !post.body) {
       alert("Please fill in all fields.");
       return;
     }
 
-    const newItem: Post = { ...post, id: Date.now() };
-    dispatch(addPost(newItem));
-    setPost({ title: "", body: "", image: null, id: 0 });
+    setLoading(true); // Start loading
+
+    try {
+      const newItem: Post = { ...post, id: Date.now() };
+      await dispatch(addPost(newItem)); // Wait for dispatch
+      setPost({ title: "", body: "", image: null, id: 0 }); // Reset form
+    } catch (error) {
+      console.error("Error adding post:", error);
+      alert("Failed to add post. Please try again.");
+    } finally {
+      setLoading(false); // Stop loading
+    }
   };
 
-  const handleUpdatePost = (updatedItem: Post) => {
-    dispatch(updatePost(updatedItem, post.id));
-    setPost({ title: "", body: "", image: null, id: 0 });
+  const handleUpdatePost = async (updatedItem: Post) => {
+    setLoading(true);
+
+    try {
+      await dispatch(updatePost(updatedItem, post.id));
+      setPost({ title: "", body: "", image: null, id: 0 });
+    } catch (error) {
+      console.error("Error updating post:", error);
+      alert("Failed to update post. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -78,6 +97,7 @@ export default function Home() {
             setPost={setPost}
             handleSubmit={handleSubmit}
             handleUpdatePost={handleUpdatePost}
+            loading={loading}
           />
         </div>
 
